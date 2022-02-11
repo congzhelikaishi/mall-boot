@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.testweb.mall.dao.EsProductDao">
+    <resultMap id="esProductListMap" type="com.testweb.mall.domain.EsProduct" autoMapping="true">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="product_sn" jdbcType="VARCHAR" property="productSn"/>
+        <result column="brand_id" jdbcType="BIGINT" property="brandId"/>
+        <result column="brand_name" jdbcType="VARCHAR" property="brandName"/>
+        <result column="product_category_id" jdbcType="BIGINT" property="productCategoryId"/>
+        <result column="product_category_name" jdbcType="VARCHAR" property="productCategoryName"/>
+        <result column="pic" jdbcType="VARCHAR" property="pic"/>
+        <result column="sale" jdbcType="INTEGER" property="sale"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="sub_title" jdbcType="VARCHAR" property="subTitle"/>
+        <result column="keywords" jdbcType="VARCHAR" property="keywords"/>
+        <result column="new_status" jdbcType="INTEGER" property="newStatus"/>
+        <result column="stock" jdbcType="INTEGER" property="stock"/>
+        <result column="sort" jdbcType="INTEGER" property="sort"/>
+        <result column="promotion_type" jdbcType="INTEGER" property="promotionType"/>
+        <result column="recommand_status" jdbcType="INTEGER" property="recommandStatus"/>
+        <result column="price" jdbcType="DECIMAL" property="price" />
+        <collection property="attrValueList" columnPrefix="attr_" ofType="com.testweb.mall.domain.EsProductAttributeValue">
+<!--            当一个collection 定义了一个columnPrefix时，其含义是将前缀自动添加到它下面的column中-->
+            <id column="id" property="id" jdbcType="BIGINT"/>
+            <result column="product_attribute_id" property="productAttributeId" jdbcType="BIGINT"/>
+            <result column="value" property="value" jdbcType="VARCHAR"/>
+            <result column="type" property="type"/>
+            <result column="name" property="name" jdbcType="VARCHAR"/>
+        </collection>
+    </resultMap>
+    <select id="getAllEsProductList" resultMap="esProductListMap">
+        select
+        p.id id,
+        p.product_sn product_sn,
+        p.brand_id brand_id,
+        p.brand_name brand_name,
+        p.product_category_id product_category_id,
+        p.product_category_name product_category_name,
+        p.pic pic,
+        p.name name,
+        p.sub_title sub_title,
+        p.price price,
+        p.sale sale,
+        p.new_status new_status,
+        p.recommand_status recommand_status,
+        p.stock stock,
+        p.promotion_type promotion_type,
+        p.keywords keywords,
+        p.sort sort,
+        pav.id attr_id,
+        pav.value attr_value,
+        pav.product_attribute_id attr_product_attribute_id,
+        pa.type attr_type,
+        pa.name attr_name
+        from pms_product p
+        left join pms_product_attribute_value pav on p.id = pav.product_id  -- join后的表，并不是我们想要的，这时，可以用 ON 来加一些条件（左联立即以左边的表为基础查询右边的表）
+        left join pms_product_attribute pa on pav.product_attribute_id= pa.id
+        where p.delete_status = 0 and p.publish_status = 1
+        <if test="id!=null">  -- 动态sql标签if
+            and p.id=#{id}
+        </if>
+    </select>
+</mapper>
