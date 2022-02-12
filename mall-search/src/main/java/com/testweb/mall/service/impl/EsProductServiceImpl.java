@@ -232,7 +232,7 @@ public class EsProductServiceImpl implements EsProductService {
             builder.withPageable(pageable);  // 添加分页
             NativeSearchQuery searchQuery = builder.build();
             LOGGER.info("DSL:{}", searchQuery.getQuery().toString());
-            SearchHits<EsProduct> searchHits = elasticsearchRestTemplate.search(searchQuery, EsProduct.class);
+            SearchHits<EsProduct> searchHits = elasticsearchRestTemplate.search(searchQuery, EsProduct.class);  // ElasticsearchTemplate 该对象是负责索引库操作的,可以对索引库进行增删改查操作
             if(searchHits.getTotalHits()<=0){
                 return new PageImpl<>(null,pageable,0);
             }
@@ -247,15 +247,15 @@ public class EsProductServiceImpl implements EsProductService {
      */
     @Override
     public EsProductRelatedInfo searchRelatedInfo(String keyword) {
-        NativeSearchQueryBuilder builder = new NativeSearchQueryBuilder();
+        NativeSearchQueryBuilder builder = new NativeSearchQueryBuilder();  // nativeSearchQueryBuilder该参数用于构建各种搜索条件，主要用于封装参数使用
         //搜索条件
         if(StringUtils.isEmpty(keyword)){
-            builder.withQuery(QueryBuilders.matchAllQuery());
+            builder.withQuery(QueryBuilders.matchAllQuery());  // withQuery:构建一个关键字查询
         }else{
-            builder.withQuery(QueryBuilders.multiMatchQuery(keyword,"name","subTitle","keywords"));  // 多字段匹配
+            builder.withQuery(QueryBuilders.multiMatchQuery(keyword,"name","subTitle","keywords"));  // multiMatchQuery()多字段匹配
         }
         //聚合搜索品牌名称
-        builder.addAggregation(AggregationBuilders.terms("brandNames").field("brandName"));
+        builder.addAggregation(AggregationBuilders.terms("brandNames").field("brandName"));  // addAggregation:添加一个聚合擦操作比如mysql中的group by, count 等函数   AggregationBuilders.terms("brandNames").field("brandName")根据brandName进行分组统计，统计出的列别名叫brandNames   terms 取别名 等价于mysql product_name as 产品名称的概念   field 表示根据哪个域进行分组 es分类名称 categoryName
         //集合搜索分类名称
         builder.addAggregation(AggregationBuilders.terms("productCategoryNames").field("productCategoryName"));
         //聚合搜索商品属性，去除type=1的属性
@@ -326,4 +326,6 @@ SortBuilders ：设置排序条件；
 HighlightBuilder ：设置高亮显示；
 
 QueryBuilders是ES中的查询条件构造器
+
+QueryBuilders.boolQuery().should();//至少满足一个条件，这个文档就符合should，相当于or
  */
