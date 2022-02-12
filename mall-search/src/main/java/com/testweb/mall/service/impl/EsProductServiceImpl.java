@@ -252,7 +252,7 @@ public class EsProductServiceImpl implements EsProductService {
         if(StringUtils.isEmpty(keyword)){
             builder.withQuery(QueryBuilders.matchAllQuery());
         }else{
-            builder.withQuery(QueryBuilders.multiMatchQuery(keyword,"name","subTitle","keywords"));
+            builder.withQuery(QueryBuilders.multiMatchQuery(keyword,"name","subTitle","keywords"));  // 多字段匹配
         }
         //聚合搜索品牌名称
         builder.addAggregation(AggregationBuilders.terms("brandNames").field("brandName"));
