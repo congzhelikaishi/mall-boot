@@ -255,7 +255,7 @@ public class EsProductServiceImpl implements EsProductService {
             builder.withQuery(QueryBuilders.multiMatchQuery(keyword,"name","subTitle","keywords"));  // multiMatchQuery()多字段匹配
         }
         //聚合搜索品牌名称
-        builder.addAggregation(AggregationBuilders.terms("brandNames").field("brandName"));  // addAggregation:添加一个聚合擦操作比如mysql中的group by, count 等函数   AggregationBuilders.terms("brandNames").field("brandName")根据brandName进行分组统计，统计出的列别名叫brandNames   terms 取别名 等价于mysql product_name as 产品名称的概念   field 表示根据哪个域进行分组 es分类名称 categoryName
+        builder.addAggregation(AggregationBuilders.terms("brandNames").field("brandName"));  //  按某个字段分组（设置一个叫 brandNames 聚合，聚合字段是brandName）  1.addAggregation:添加一个聚合擦操作比如mysql中的group by, count 等函数   2.AggregationBuilders.terms("brandNames").field("brandName")根据brandName进行分组统计，统计出的列别名叫brandNames   3.terms 取别名 等价于mysql product_name as 产品名称的概念   4.field 表示根据哪个域进行分组 es分类名称:brandName   5.AggregationBuilders.field 相当于sql中的group by
         //集合搜索分类名称
         builder.addAggregation(AggregationBuilders.terms("productCategoryNames").field("productCategoryName"));
         //聚合搜索商品属性，去除type=1的属性
@@ -328,4 +328,8 @@ HighlightBuilder ：设置高亮显示；
 QueryBuilders是ES中的查询条件构造器
 
 QueryBuilders.boolQuery().should();//至少满足一个条件，这个文档就符合should，相当于or
+
+聚合查询
+一个桶就是满足特定条件的一个文档集合
+分桶是达到最终目的的手段：提供了对文档进行划分的方法，从而让你能够计算需要的指标
  */
