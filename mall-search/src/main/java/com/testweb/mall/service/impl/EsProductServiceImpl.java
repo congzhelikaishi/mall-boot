@@ -255,18 +255,18 @@ public class EsProductServiceImpl implements EsProductService {
             builder.withQuery(QueryBuilders.multiMatchQuery(keyword,"name","subTitle","keywords"));  // multiMatchQuery()多字段匹配
         }
         //聚合搜索品牌名称
-        builder.addAggregation(AggregationBuilders.terms("brandNames").field("brandName"));  //  按某个字段分组（设置一个叫 brandNames 聚合，聚合字段是brandName）  1.addAggregation:添加一个聚合擦操作比如mysql中的group by, count 等函数   2.AggregationBuilders.terms("brandNames").field("brandName")根据brandName进行分组统计，统计出的列别名叫brandNames   3.terms 取别名 等价于mysql product_name as 产品名称的概念   4.field 表示根据哪个域进行分组 es分类名称:brandName   5.AggregationBuilders.field 相当于sql中的group by
+        builder.addAggregation(AggregationBuilders.terms("brandNames").field("brandName"));  //  按某个字段分组（设置一个叫 brandNames 聚合，聚合字段是brandName）  1.addAggregation:添加一个聚合擦操作比如mysql中的group by, count 等函数   2.AggregationBuilders.terms("brandNames").field("brandName")根据brandName进行分组统计，统计出的列别名叫brandNames   3.terms 取别名 等价于mysql product_name as 产品名称的概念(给聚合查询取得名   4.field 表示根据哪个域进行分组 es分类名称:brandName   5.AggregationBuilders.field 相当于sql中的group by
         //集合搜索分类名称
         builder.addAggregation(AggregationBuilders.terms("productCategoryNames").field("productCategoryName"));
         //聚合搜索商品属性，去除type=1的属性
-        AbstractAggregationBuilder aggregationBuilder = AggregationBuilders.nested("allAttrValues","attrValueList")
-                .subAggregation(AggregationBuilders.filter("productAttrs",QueryBuilders.termQuery("attrValueList.type",1))
+        AbstractAggregationBuilder aggregationBuilder = AggregationBuilders.nested("allAttrValues","attrValueList")  // nested嵌套的聚合
+                .subAggregation(AggregationBuilders.filter("productAttrs",QueryBuilders.termQuery("attrValueList.type",1))  // 1.filter聚合过滤   2.termQuery：不会对搜索词进行分词处理，而是作为一个整体与目标字段进行匹配，若完全匹配，则可查询到   3.subAggregation添加子查询到节点里面
                         .subAggregation(AggregationBuilders.terms("attrIds")
                                 .field("attrValueList.productAttributeId")
-                                .subAggregation(AggregationBuilders.terms("attrValues")
+                                    .subAggregation(AggregationBuilders.terms("attrValues")
                                         .field("attrValueList.value"))
-                                .subAggregation(AggregationBuilders.terms("attrNames")
-                                        .field("attrValueList.name"))));
+                                            .subAggregation(AggregationBuilders.terms("attrNames")
+                                                .field("attrValueList.name"))));
         builder.addAggregation(aggregationBuilder);
         NativeSearchQuery searchQuery = builder.build();
         SearchHits<EsProduct> searchHits = elasticsearchRestTemplate.search(searchQuery, EsProduct.class);
