@@ -24,7 +24,7 @@
             AND order_type = #{queryParam.orderType}
         </if>
         <if test="queryParam.createTime!=null and queryParam.createTime!=''">
-            AND create_time LIKE concat(#{queryParam.createTime},"%")
+            AND create_time LIKE concat(#{queryParam.createTime},"%")      --使用concat函数进行拼接   like '%xxx%'匹配包含xxx的内容，'%xxx'匹配一xxx结尾的内容，'xxx%'匹配以xxx开头的内容
         </if>
         <if test="queryParam.receiverKeyword!=null and queryParam.receiverKeyword!=''">
             AND (
