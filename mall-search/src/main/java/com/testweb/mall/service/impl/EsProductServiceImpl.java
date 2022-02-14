@@ -278,12 +278,13 @@ public class EsProductServiceImpl implements EsProductService {
      */
     private EsProductRelatedInfo convertProductRelatedInfo(SearchHits<EsProduct> response) {
         EsProductRelatedInfo productRelatedInfo = new EsProductRelatedInfo();
+        //将返回的结果放入到一个map中
         Map<String, Aggregation> aggregationMap = response.getAggregations().getAsMap();
         //设置品牌
-        Aggregation brandNames = aggregationMap.get("brandNames");
+        Aggregation brandNames = aggregationMap.get("brandNames");  // 取出聚合属性
         List<String> brandNameList = new ArrayList<>();
-        for(int i = 0; i<((Terms) brandNames).getBuckets().size(); i++){
-            brandNameList.add(((Terms) brandNames).getBuckets().get(i).getKeyAsString());
+        for(int i = 0; i<((Terms) brandNames).getBuckets().size(); i++){  // getBuckets().size()获取桶的数
+            brandNameList.add(((Terms) brandNames).getBuckets().get(i).getKeyAsString());  // 获取当前桶的数据   getAsString()--转换成字符串
         }
         productRelatedInfo.setBrandNames(brandNameList);
         //设置分类
@@ -295,13 +296,13 @@ public class EsProductServiceImpl implements EsProductService {
         productRelatedInfo.setProductCategoryNames(productCategoryNameList);
         //设置参数
         Aggregation productAttrs = aggregationMap.get("allAttrValues");
-        List<? extends Terms.Bucket> attrIds = ((ParsedLongTerms) ((ParsedFilter) ((ParsedNested) productAttrs).getAggregations().get("productAttrs")).getAggregations().get("attrIds")).getBuckets();
+        List<? extends Terms.Bucket> attrIds = ((ParsedLongTerms) ((ParsedFilter) ((ParsedNested) productAttrs).getAggregations().get("productAttrs")).getAggregations().get("attrIds")).getBuckets();  // getAggregations().get("xxx")使用聚合请求 返回类型可以转换为Terms
         List<EsProductRelatedInfo.ProductAttr> attrList = new ArrayList<>();
         for (Terms.Bucket attrId : attrIds) {
             EsProductRelatedInfo.ProductAttr attr = new EsProductRelatedInfo.ProductAttr();
             attr.setAttrId((Long) attrId.getKey());
             List<String> attrValueList = new ArrayList<>();
-            List<? extends Terms.Bucket> attrValues = ((ParsedStringTerms) attrId.getAggregations().get("attrValues")).getBuckets();
+            List<? extends Terms.Bucket> attrValues = ((ParsedStringTerms) attrId.getAggregations().get("attrValues")).getBuckets();  // jackson在序列化的时候，当terms聚合的key为字符串类型时，则会调用ParsedStringTerms类来转换处理字段
             List<? extends Terms.Bucket> attrNames = ((ParsedStringTerms) attrId.getAggregations().get("attrNames")).getBuckets();
             for (Terms.Bucket attrValue : attrValues) {
                 attrValueList.add(attrValue.getKeyAsString());
@@ -332,4 +333,8 @@ QueryBuilders.boolQuery().should();//至少满足一个条件，这个文档就�
 聚合查询
 一个桶就是满足特定条件的一个文档集合
 分桶是达到最终目的的手段：提供了对文档进行划分的方法，从而让你能够计算需要的指标
+
+ Aggregation集合
+聚合可以是父子（嵌套）关系聚合，buckets 聚合作为父，metric 聚合作为子。
+聚合也可以是兄弟关系聚合，buckets 聚合在前，pipeline 聚合在后
  */
