@@ -21,7 +21,7 @@ public class MemberDetails implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() { //TODO
         //返回当前用户权限
-        return Arrays.asList(new SimpleGrantedAuthority("TEST"));
+        return Arrays.asList(new SimpleGrantedAuthority("TEST"));  // Arrays.asList将一个数组转换为 List
     }
 
     @Override
