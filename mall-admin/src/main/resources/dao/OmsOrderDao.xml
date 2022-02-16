@@ -65,6 +65,7 @@
         </foreach>
         AND `status` = 1
     </update>
+<!--    ORDER BY设置排序方式，此处为先oi的id升序后oh时间降序-->
     <select id="getDetail" resultMap="orderDetailResultMap">
         SELECT o.*,
         oi.id item_id,
