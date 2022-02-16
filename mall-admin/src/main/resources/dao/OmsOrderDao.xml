@@ -34,7 +34,7 @@
         </if>
     </select>
 
-<!--    case（简单case等值就行）、when（条件id==orderId）、then（设置值为）:当满足某一条件时执行-->
+<!--    case（简单case等值就行）、when（条件id==orderId）、then（设置值为）:当满足某一条件时执行、IN:条件在指定范围内（多个or的连用）-->
     <update id="delivery">
         UPDATE oms_order
         SET
