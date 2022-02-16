@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 在@RabbitListener注解内配置了监听的队列，这里配置内容是QueueEnum枚举内的queueName属性值，当然如果你采用常量的方式在注解属性上是直接可以使用的，枚举不支持这种配置，这里只能把QueueName字符串配置到queues属性上了。
 由于我们在消息发送时采用字符串的形式发送消息内容，这里在@RabbitHandler处理方法的参数内要保持数据类型一致
  */
-public class CancelOrderReceiver { //TODO
+public class CancelOrderReceiver {
     private static final Logger LOGGER = LoggerFactory.getLogger(CancelOrderReceiver.class);
 
     @Autowired

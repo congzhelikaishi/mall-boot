@@ -342,7 +342,7 @@ public class OmsPortalOrderServiceImpl implements OmsPortalOrderService {
      * 发送延迟消息取消订单
      */
     @Override
-    public void sendDelayMessageCancelOrder(Long orderId) {  //TODO  rabbitMQ
+    public void sendDelayMessageCancelOrder(Long orderId) {
         //获取订单超时时间
         OmsOrderSetting orderSetting = orderSettingMapper.selectByPrimaryKey(1L);
         long delayTimes = orderSetting.getNormalOrderOvertime() * 60 * 1000;  // 毫秒

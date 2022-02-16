@@ -116,7 +116,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
         //密码需要客户端加密后传递
         try {
             UserDetails userDetails = loadUserByUsername(username); // 获取用户信息存入UserDetails,后面会进行security安全验证
-            if (!passwordEncoder.matches(password,userDetails.getPassword())){  //TODO  passwordEncoder
+            if (!passwordEncoder.matches(password,userDetails.getPassword())){
                 /*
                 matches(CharSequence rawPassword, String encodedPassword)
                 第一个参数是原密码

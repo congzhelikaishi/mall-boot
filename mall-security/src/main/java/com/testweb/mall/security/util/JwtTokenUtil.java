@@ -37,7 +37,7 @@ import java.util.Map;
  *
  */
 
-public class JwtTokenUtil {//TODO
+public class JwtTokenUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtTokenUtil.class);
     //用户名的key
     private static final String CLAIM_KEY_USERNAME = "sub";  // 用户

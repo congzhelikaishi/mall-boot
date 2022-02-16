@@ -6,7 +6,7 @@ import lombok.Getter;
  * 消息队列枚举配置
  */
 @Getter
-public enum QueueEnum { //TODO
+public enum QueueEnum {
     /**
      * 消息通知队列
      */

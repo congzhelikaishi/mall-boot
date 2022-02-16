@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
  * 延迟订单接收者
  */
 @Component
-public class CancelOrderSender { //TODO
+public class CancelOrderSender {
 
     private static Logger LOGGER = LoggerFactory.getLogger(CancelOrderSender.class);
 

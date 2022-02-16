@@ -11,7 +11,7 @@ import java.util.Collection;
 /**
  * 会员详情封装
  */
-public class MemberDetails implements UserDetails { //TODO
+public class MemberDetails implements UserDetails {
     private UmsMember umsMember;
 
     public MemberDetails(UmsMember umsMember) {
