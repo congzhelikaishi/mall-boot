@@ -60,9 +60,18 @@ public class OmsPortalOrderController {
         return CommonResult.success(null);
     }
 
+    /*
+    paramType：参数放在哪个地方
+    header --> 请求参数的获取：@RequestHeader
+    query --> 请求参数的获取：@RequestParam
+    path（用于restful接口）--> 请求参数的获取：@PathVariable
+    body（请求体）--> @RequestBody User user
+    form（普通表单提交）
+
+     */
     @ApiOperation("按状态分页获取用户订单列表")
     @ApiImplicitParam(name = "status", value = "订单状态：-1->全部；0->待付款；1->待发货；2->已发货；3->已完成；4->已关闭",
-            defaultValue = "-1", allowableValues = "-1,0,1,2,3,4", paramType = "query", dataType = "int")  //TODO @ApiImplicitParam
+            defaultValue = "-1", allowableValues = "-1,0,1,2,3,4", paramType = "query", dataType = "int")  // @ApiImplicitParam:非对象参数描述   allowableValues:限制参数的可接受值
     @GetMapping("/list")
     public CommonResult<CommonPage<OmsOrderDetail>> list(@RequestParam Integer status,
                                                          @RequestParam(required = false, defaultValue = "1") Integer pageNum,
