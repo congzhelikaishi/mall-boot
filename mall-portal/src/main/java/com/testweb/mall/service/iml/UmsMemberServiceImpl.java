@@ -134,6 +134,9 @@ public class UmsMemberServiceImpl implements UmsMemberService {
         memberCacheService.delMember(umsMember.getId());
     }
 
+    /**
+     * 获取当前登录会员
+     */
     @Override
     public UmsMember getCurrentMember() {  //TODO
         SecurityContext ctx = SecurityContextHolder.getContext();
