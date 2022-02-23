@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  * 获取Spring容器中bean工具类
  */
 @Component
-public class SpringUtil implements ApplicationContextAware {
+public class SpringUtil implements ApplicationContextAware {  //TODO 获取Bean工具
 
     private static ApplicationContext applicationContext;
 
