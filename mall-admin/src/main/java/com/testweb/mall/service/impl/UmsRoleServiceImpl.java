@@ -23,7 +23,7 @@ public class UmsRoleServiceImpl implements UmsRoleService {
     private UmsRoleMenuRelationMapper roleMenuRelationMapper;
     @Autowired
     private UmsRoleResourceRelationMapper roleResourceRelationMapper;
-    @Autowired(required = false)
+    @Autowired
     private UmsRoleDao roleDao;
     @Autowired
     private UmsAdminCacheService adminCacheService;
